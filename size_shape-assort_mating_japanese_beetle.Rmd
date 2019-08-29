@@ -1,0 +1,263 @@
+---
+title: Size and shape assortative mating in Japanese beetles (*Popillia japonica*)
+titlerunning: Assortative mating in Japanese beetles
+authorrunning: Kelly
+thanks: | 
+    Grants or other notes about the article that should go on the front 
+    page should be placed here. General acknowledgments should be placed at the
+    end of the article.
+
+authors: 
+- name: Clint D. Kelly 1
+  address: Département des Sciences biologiques, Université du Québec à Montréal
+  email: kelly.clint@uqam.ca
+
+keywords:
+- sexual selection
+- scramble competition
+- word
+
+#PACS: 
+#- PAC1
+#- superPAC
+    
+MSC:
+- MSC code 1
+- MSC code 2    
+
+abstract: |
+  The text of your abstract.  150 -- 250 words.
+output: 
+    bookdown::pdf_book:
+      base_format: rticles::springer_article
+      toc: false
+      latex_engine: xelatex
+      keep_tex: yes
+      fig_caption: true
+      citation_package: none
+      template: default.latex
+      #pandoc_args: [ "--csl", "evolution.csl" ]
+bibliography: bibliography.bib
+
+header-includes:
+  \usepackage{pdflscape}  
+  \usepackage{graphicx}
+  \usepackage{booktabs}
+---
+
+```{r setup, echo =FALSE}
+knitr::opts_chunk$set(
+  options(tinytex.verbose = TRUE),
+  knitr.table.format = "latex",
+  comment = "#>",
+  collapse = TRUE,
+  dev = 'pdf',
+  warning = FALSE,
+  message = FALSE,
+  echo = FALSE,
+  dpi=300
+)
+library(magrittr)
+options(scipen = 999, digits = 2)
+knitr::knit_hooks$set(inline = function(x) {
+      if(is.numeric(x)){
+          return(prettyNum(x, big.mark=","))
+      }else{
+          return(x)
+       }
+   })
+```
+
+```{r echo=FALSE}
+knitr::read_chunk('japanese_beetle_assort.R')
+```
+
+```{r load_libraries}
+```
+
+```{r echo=FALSE, warning=FALSE, results="hide"}
+<<shape-analysis>>
+```
+
+```{r echo=FALSE, warning=FALSE, results="hide"}
+<<size-analysis>>
+```
+
+```{r echo=FALSE, warning=FALSE, results="hide"}
+<<density-plot>>
+```
+
+# Introduction {#intro}
+
+Your text comes here. Separate text sections with
+
+# Methods {#methods}
+
+This is what I did...
+
+
+# Results {#results:1}
+
+
+## Size assortative mating {#size:2}
+
+All phenotypic size traits examined in this study are positively correlated in both sexes (Table \@ref(tab:size-corr)). In line with the sexual selection hypothesis, the body lengths of females and males in mated pairs were significantly positively correlated (r=`r rcorr(as.matrix(mf.body))$r[1,2]`, n=`r rcorr(as.matrix(mf.body))$n[1,2]`, p=`r rcorr(as.matrix(mf.body))$P[1,2]`). Contrary to prediction, however, there was weak assortative mating based on elytra width (r=`r rcorr(as.matrix(mf.elytra))$r[1,2]`, n=`r rcorr(as.matrix(mf.elytra))$n[1,2]`, p=`r rcorr(as.matrix(mf.elytra))$P[1,2]`). That wing length of pair members were significantly correlated (r=`r rcorr(as.matrix(mf.wing))$r[1,2]`, n=`r rcorr(as.matrix(mf.wing))$n[1,2]`, p`r format_pval(rcorr(as.matrix(mf.wing))$P[1,2],eps=0.0001,digits=3)`) supports the temporal autocorrelation hypothesis. Although the correlation involving wing length (r=`r rcorr(as.matrix(mf.wing))$r[1,2]`) is nearly double the correlation involving body length (r=`r rcorr(as.matrix(mf.body))$r[1,2]`), the difference is not significant (z=`r corr.test.mf$z`, p=`r corr.test.mf$p`). 
+
+Body centroid size positively correlates with wing centroid size in males (r=`r male.corr$r[1,2]`, p `r format_pval(male.corr$P[1,2],eps=0.0001,digits=3)`, n=`r male.corr$n[1,2]`) and in females (r=`r female.corr$r[1,2]`, p `r format_pval(female.corr$P[1,2],eps=0.0001,digits=3)`, n=`r female.corr$n[1,2]`). Contrary to prediction, the body centroid sizes of females and males in mated pairs were not significantly correlated (r=`r body.Csize$r[1,2]`, p =`r body.Csize$P[1,2]`, n=`r body.Csize$n[1,2]`). However, wing centroid size significantly positively correlates within pairs (r=`r wing.Csize$r[1,2]`, p `r format_pval(wing.Csize$P[1,2],eps=0.0001,digits=3)`, n=`r wing.Csize$n[1,2]`).
+
+(Table \@ref(tab:size-correlations))
+
+(ref:size-correlations) Pearson produce-moment correlations between three linear size traits in (a) females (n = `r length(female.size$body.length)`) and (b) males (n = `r length(male.size$body.length)`). **** denotes p < 0.0001.
+
+```{r size-corr}
+require(kableExtra)
+corr.table.3 %>%
+  knitr::kable("latex",booktabs=T, linesep="",escape = F, caption="(ref:size-correlations)",
+                col.names = c("","Body length", "Elytra width")) %>%
+    row_spec(0,align = "l") %>%
+    group_rows("(a) Females", 1, 3, latex_align = "l") %>%
+    group_rows("(b) Males", 4, 6, latex_align = "l")
+```
+
+Don't forget to give each section and subsection a unique label (see Sect. \ref{size:2}).
+
+I found no evidence of triangularity with respect to correlations involving body length ($\rho$=`r spear.corr.body$r[1,2]`, p =`r spear.corr.body$P[1,2]`, n=`r spear.corr.body$n[1,2]`), wing length ($\rho$=`r spear.corr.wing$r[1,2]`, p =`r spear.corr.wing$P[1,2]`, n=`r spear.corr.wing$n[1,2]`), or wing centroid size ($\rho$=`r spear.corr.centroid$r[1,2]`, p =`r spear.corr.centroid$P[1,2]`, n=`r spear.corr.centroid$n[1,2]`) suggesting that Japanese beetles exhibit true assortative mating with respect to these traits.
+
+(ref:density-plot) Sex-specific density plots showing the distribution of unmated and mated Japanese beetles (*Popillia japonica*) in a field population (Ames, IA).
+
+```{r out.width="97%", fig.cap="(ref:density-plot)"}
+p3<-ggplot(beetle_data, aes(x=body.length, fill=status)) +
+  geom_density(alpha=0.5) +
+  scale_x_continuous(name="Body length (mm)",limits = c(7.5, 11.5),
+                     labels = scales::number_format(accuracy = 0.1)) +
+  scale_y_continuous(name="Density",
+                     labels = scales::number_format(accuracy = 0.01)) +
+  scale_fill_manual(values = c("grey", "black"),labels=c("Unmated","Mated"),name="") +
+  theme(legend.justification=c(1,0), legend.position=c(.3,.8)) +
+  theme(panel.grid.minor=element_blank(),
+        panel.grid.major=element_blank())+
+  theme(legend.background=element_blank())+
+  facet_grid(sex ~ .)
+plot(p3)
+```
+
+(ref:size-plot) The correlation between (a) body lengths (r=`r rcorr(as.matrix(mf.body))$r[1,2]`, n=`r rcorr(as.matrix(mf.body))$n[1,2]`, p=`r rcorr(as.matrix(mf.body))$P[1,2]`), (b) wing lengths (r=`r rcorr(as.matrix(mf.wing))$r[1,2]`, n=`r rcorr(as.matrix(mf.wing))$n[1,2]`, p `r format_pval(rcorr(as.matrix(mf.wing))$P[1,2],eps=0.0001,digits=3)`), (c) body centroid size (r= `r body.Csize$r[1,2]`, p =`r body.Csize$P[1,2]`, n=`r body.Csize$n[1,2]`), and (d) wing centroid size  (r=`r wing.Csize$r[1,2]`, p `r format_pval(wing.Csize$P[1,2],eps=0.0001,digits=3)`, n=`r wing.Csize$n[1,2]`) of mating female and male Japanese beetles (*Popillia japonica*) in a field population (Ames, IA).
+
+```{r size-plot, out.extra = "", fig.cap="(ref:size-plot)", out.width="97%"}
+p1<-ggplot(beetle.data_4, aes(x=male_body.length, y=female_body.length)) +
+  geom_point() +
+  geom_smooth(method = "lm",formula=y~x, se=FALSE) +
+  theme(panel.grid.minor=element_blank(),
+        panel.grid.major=element_blank())+
+  theme(axis.title.x=element_text(size=12),
+        axis.text.x=element_text(size=10,colour="grey50"))+
+  scale_y_continuous(name="Female body \nlength (mm)",limits = c(8,11),
+                     labels = scales::number_format(accuracy = 0.1)) +
+  scale_x_continuous(name="Male body length (mm)", limits = c(7.5,10.5),
+                     labels = scales::number_format(accuracy = 0.1)) +
+  #scale_colour_manual(values = c("grey", "black"),labels=c("Unmated females","Mated females"),name="") +
+  theme(axis.title.y=element_text(size=12,angle=90,vjust=0.9),
+        axis.text.y=element_text(size=10, vjust=0.9, color = "grey50"))
+
+p2<-ggplot(beetle.data_4, aes(x=male_wing.length, y=female_wing.length)) +
+  geom_point() +
+  geom_smooth(method = "lm",formula=y~x, se=FALSE) +
+  theme(panel.grid.minor=element_blank(),
+        panel.grid.major=element_blank())+
+  theme(axis.title.x=element_text(size=12),
+        axis.text.x=element_text(size=10,colour="grey50"))+
+  scale_y_continuous(name="Female wing \nlength (mm)",limits = c(8,11.5),
+                     labels = scales::number_format(accuracy = 0.1)) +
+  scale_x_continuous(name="Male wing length (mm)", limits = c(8,11.5),
+                     labels = scales::number_format(accuracy = 0.1)) +
+  #scale_colour_manual(values = c("grey", "black"),labels=c("Unmated females","Mated females"),name="") +
+  theme(axis.title.y=element_text(size=12,angle=90,vjust=0.9),
+        axis.text.y=element_text(size=10,vjust=0.9, color = "grey50"))
+
+p3<-ggplot(wing.body.total.4, aes(x=male_Csize.body, y=female_Csize.body)) +
+  geom_point() +
+  geom_smooth(method = "lm",formula=y~x, se=FALSE) +
+  theme(panel.grid.minor=element_blank(),
+        panel.grid.major=element_blank())+
+  theme(axis.title.x=element_text(size=12),
+        axis.text.x=element_text(size=10,colour="grey50"))+
+  scale_y_continuous(name="Female body \ncentroid size",
+                     labels = scales::number_format(accuracy = 0.1)) +
+  scale_x_continuous(name="Male body centroid size", 
+                     labels = scales::number_format(accuracy = 0.1)) +
+  theme(axis.title.y=element_text(size=12,angle=90,vjust=0.9),
+        axis.text.y=element_text(size=10,vjust=0.9, color = "grey50"))
+
+p4<-ggplot(wing.body.total.4, aes(x=male_Csize.wing, y=female_Csize.wing)) +
+  geom_point() +
+  geom_smooth(method = "lm",formula=y~x, se=FALSE) +
+  theme(panel.grid.minor=element_blank(),
+        panel.grid.major=element_blank())+
+  theme(axis.title.x=element_text(size=12),
+        axis.text.x=element_text(size=10,colour="grey50"))+
+  scale_y_continuous(name="Female wing \ncentroid size",
+                     labels = scales::number_format(accuracy = 0.1)) +
+  scale_x_continuous(name="Male wing centroid size", 
+                     labels = scales::number_format(accuracy = 0.1)) +
+  theme(axis.title.y=element_text(size=12,angle=90,vjust=0.9),
+        axis.text.y=element_text(size=10,vjust=0.9, color = "grey50"))
+plot_grid(p1, p2, p3,p4, labels = c('(a)', '(b)','(c)', '(d)'))
+```
+
+
+## Shape assortative mating {#shape:2}
+
+The body shapes of pair members did not significantly correlate for any shape variable while statistically controlling for trait size (log10 centroid size) (PC1: r= `r male_pc1_body$estimate`, p=`r male_pc1_body$p.value`, n=`r male_pc1_body$n`; PC2: r= `r male_pc2_body$estimate`, p=`r male_pc2_body$p.value`, n=`r male_pc2_body$n`; PC3: r= `r male_pc3_body$estimate`, p=`r male_pc3_body$p.value`, n=`r male_pc3_body$n`). PC1 wing shape of pair members significantly correlated, while statistically controlling for wing size (log10 centroid size) (PC1: r=`r male_pc1_wing$estimate`, p=`r male_pc1_wing$p.value`, n=`r male_pc1_wing$n`), but  the other two shape variables did not (PC2: r=`r male_pc2_wing$estimate`, p=`r male_pc2_wing$p.value`, n=`r male_pc2_wing$n`; PC3: r=`r male_pc3_wing$estimate`, p=`r male_pc3_wing$p.value`, n=`r male_pc3_wing$n`).
+
+(ref:wingPC-plot) Residual wing shape (PC1) of mating female and male Japanese beetles (*Popillia japonica*) was significantly correlated (r=`r male_pc1_wing$estimate`, p=`r male_pc1_wing$p.value`, n=`r male_pc1_wing$n`). Wing shape residuals were obtained by regressing wing shape (PC1) on wing centroid size (log-transformed) for each sex. 
+
+```{r wingplot, out.extra = "", fig.cap="(ref:wingPC-plot)", fig.width=6, fig.height=7}
+male_min <- image_read("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Research/research projects/2019_japanese_beetle_assort_mate/male_wing_min_pc1.png", strip=TRUE) %>%
+  image_trim()
+g.male.min =  rasterGrob(male_min, interpolate=TRUE)
+
+male_max <- image_read("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Research/research projects/2019_japanese_beetle_assort_mate/male_wing_max_pc1.png", strip=TRUE) %>%
+  image_trim()
+g.male.max =  rasterGrob(male_max, interpolate=TRUE)
+
+female_min <- image_read("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Research/research projects/2019_japanese_beetle_assort_mate/female_wing_min_pc1.png", strip=TRUE) %>%
+  image_trim()
+g.female.min =  rasterGrob(female_min, interpolate=TRUE)
+
+female_max <- image_read("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Research/research projects/2019_japanese_beetle_assort_mate/female_wing_max_pc1.png", strip=TRUE) %>%
+  image_trim()
+g.female.max =  rasterGrob(female_max, interpolate=TRUE)
+
+#male_min <-image_trim(male_min)
+p1<-ggplot(wing.residuals, aes(x=male.PC1.res, y=female.PC1.res)) +
+  geom_point() +
+  geom_smooth(method = "lm",formula=y~x, se=FALSE) +
+  theme(panel.grid.minor=element_blank(),
+        panel.grid.major=element_blank())+
+  theme(axis.title.x=element_text(size=16),
+        axis.text.x=element_text(size=14,colour="grey50"))+
+  scale_y_continuous(name="Female residual \nwing shape (PC1)",
+                     labels = scales::number_format(accuracy = 0.01)) +
+  scale_x_continuous(name="Male residual \nwing shape (PC1)",
+                     labels = scales::number_format(accuracy = 0.01)) +
+  theme(axis.title.y=element_text(size=16,angle=90,vjust=0.9),
+        axis.text.y=element_text(size=14, vjust=0.9, color = "grey50"))+
+  theme(plot.margin = unit(c(3,2,4,4), "cm")) +
+  annotation_custom(grob=g.male.min, xmin=-0.04, xmax=-0.005, ymin=-0.08, ymax=-0.06)+
+  annotation_custom(grob=g.male.max, xmin=0.005, xmax=0.04, ymin=-0.08, ymax=-0.06)+
+  annotation_custom(grob=g.female.min, xmin=-0.085, xmax=-0.045, ymin=-0.05, ymax=-0.03)+
+  annotation_custom(grob=g.female.max, xmin=-0.085, xmax=-0.045, ymin=0.02, ymax=0.04)+
+  coord_cartesian(clip="off")
+p1
+```
+
+
+
+
+\begin{align}
+a^2+b^2=c^2
+\end{align}
+Text with citations by @Galyardt14mmm, [@Mislevy06Cog].
+
+
+# References
